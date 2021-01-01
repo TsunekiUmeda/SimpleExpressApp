@@ -49,23 +49,26 @@ app.get('/weather', (req, res) => {
     })
   }
 
-  geocode(req.query.address, (error, { longitude, latitude, location }) => {
-    if (error) {
-      return console.log(error)
-    }
-
-    forecast(longitude, latitude, (error, forecastData) => {
+  geocode(
+    req.query.address,
+    (error, { longitude, latitude, location } = {}) => {
       if (error) {
         return console.log(error)
       }
 
-      res.send({
-        forecast: forecastData,
-        location,
-        address: req.query.address,
+      forecast(longitude, latitude, (error, forecastData) => {
+        if (error) {
+          return console.log(error)
+        }
+
+        res.send({
+          forecast: forecastData,
+          location,
+          address: req.query.address,
+        })
       })
-    })
-  })
+    }
+  )
 })
 
 app.get('/products', (req, res) => {
